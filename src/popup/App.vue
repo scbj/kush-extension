@@ -1,13 +1,32 @@
 <template>
-  <hello-world />
+  <div>
+    <input type="email" name="email">
+    <input type="password" name="password">
+    <button @click="login">Login</button>
+    <p>{{ message }}</p>
+  </div>
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld.vue'
+import message from '@/message'
 
 export default {
   name: 'App',
-  components: { HelloWorld }
+
+  data () {
+    return {
+      message: ''
+    }
+  },
+
+  methods: {
+    login () {
+      this.message = browser.i18n.getMessage('"popupConfirmation"')
+      message.notifyBackground('account:authenticated', {
+        accessToken: 'zefoefpejzfoezfoazdzajdoiazdaizuoidzaidoh'
+      })
+    }
+  }
 }
 </script>
 

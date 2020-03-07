@@ -2,5 +2,8 @@
   "extName": {
     "message": "web-extension-vue",
     "description": ""
+  },
+  "popupConfirmation": {
+    "message": "Successfully authenticated"
   }
 }
