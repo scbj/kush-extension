@@ -1,3 +1,7 @@
+import createSocketIO from 'socket.io-client'
+
+let socket = null
+
 /**
  *
  * @param {Object} params
@@ -5,20 +9,27 @@
  * @param {String} params.refreshToken
  */
 function authenticate ({ accessToken, refreshToken }) {
-  console.log('🐞: authenticate -> refreshToken', refreshToken)
-  console.log('🐞: authenticate -> accessToken', accessToken)
+  localStorage.setItem('accessToken', accessToken)
 }
 
-function connect () {
+function connect (extensionId) {
+  const accessToken = localStorage.getItem('accessToken')
   console.log('🐞: connect')
+  socket = createSocketIO('http://localhost:3000', {
+    query: {
+      accessToken,
+      extensionId,
+      type: 'extension'
+    }
+  })
 }
 
 function emit (eventName, payload) {
-  console.log('⚡: server.emit(...)', eventName, payload)
+  socket.emit(eventName, payload)
 }
 
 function on (eventName, func) {
-  func()
+  socket.on(eventName, func)
 }
 
 export default {

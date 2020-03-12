@@ -24,6 +24,6 @@ watch({
 
 watch({
   value: () => reader.url(),
-  onChanged: () => message.notifyBackground(EVENT_PLAYBACK_TRACK_CHANGED, reader.readAll()),
+  onChanged: url => message.notifyBackground(EVENT_PLAYBACK_TRACK_CHANGED, { url, ...reader.readAll() }),
   interval: 400
 })

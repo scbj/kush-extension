@@ -13,23 +13,24 @@ function onAuthenticated (payload) {
     accessToken: payload.accessToken,
     refreshToken: payload.refreshToken
   })
-  server.connect()
+  server.connect(payload.extension.id)
+
+  server.on(ACTION_PLAYBACK_TOGGLE_STATUS, () => {
+    console.log('🐞: ACTION_PLAYBACK_TOGGLE_STATUS', ACTION_PLAYBACK_TOGGLE_STATUS)
+    let querying = browser.tabs.query({
+      audible: true
+    })
+    querying
+      .then(tabs => tabs.length > 0 && message.notify(tabs[0].id, ACTION_PLAYBACK_TOGGLE_STATUS))
+      .catch(error => console.log(`Error: ${error}`))
+  })
 }
 
 message.on(ACCOUNT_AUTHENTICATED, onAuthenticated)
 message.on(EVENT_PLAYBACK_STATUS_CHANGED, payload => server.emit(EVENT_PLAYBACK_STATUS_CHANGED, payload))
 message.on(EVENT_PLAYBACK_TRACK_CHANGED, payload => server.emit(EVENT_PLAYBACK_TRACK_CHANGED, payload))
 
-message.on(ACCOUNT_AUTHENTICATED, () => {
-  let querying = browser.tabs.query({
-    audible: true
-  })
-  querying
-    .then(tabs => tabs.length > 0 && message.notify(tabs[0].id, ACTION_PLAYBACK_TOGGLE_STATUS))
-    .catch(error => console.log(`Error: ${error}`))
-})
-
-const accessToken = localStorage.getItem('accessToken')
-if (accessToken) {
-  onAuthenticated({ accessToken })
-}
+// const accessToken = localStorage.getItem('accessToken')
+// if (accessToken) {
+//   onAuthenticated({ accessToken })
+// }

@@ -5,6 +5,7 @@
   "scripts": {
     "build": "vue-cli-service build",
     "clean:dist": "rm -rf dist/",
+    "clean:node": "rm -rf node_modules/",
     "lint": "vue-cli-service lint",
     "serve": "yarn clean:dist && vue-cli-service build --mode development --watch"
   },
@@ -15,7 +16,8 @@
     "socket.io-client": "^2.3.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-pathify": "^1.4.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.0",
