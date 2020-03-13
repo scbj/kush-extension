@@ -1,6 +1,6 @@
 # Extension Configuration
 
-fetches:
+values:
   url:
     method: attribute
     props:

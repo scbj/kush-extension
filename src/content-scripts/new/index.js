@@ -29,7 +29,7 @@ const actions = {
 }
 
 function fetch (value) {
-  const config = configuration.fetches[value]
+  const config = configuration.values[value]
   const func = methods[config.method]
   return func(config.props)
 }
