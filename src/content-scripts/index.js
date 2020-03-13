@@ -1,29 +1,71 @@
-import {
-  ACTION_PLAYBACK_NEXT,
-  ACTION_PLAYBACK_PREVIOUS,
-  ACTION_PLAYBACK_TOGGLE_STATUS,
-  EVENT_PLAYBACK_STATUS_CHANGED,
-  EVENT_PLAYBACK_TRACK_CHANGED
-} from '@bit/scbj.kush.constants'
-
+import configuration from '@/configuration.json'
 import message from '@/message'
 import { watch } from '@/utils'
 
-import controller from '@/content-scripts/controller'
-import reader from '@/content-scripts/reader'
+import actions from './actions'
+import getters from './getters'
 
-message.on(ACTION_PLAYBACK_NEXT, () => controller.next())
-message.on(ACTION_PLAYBACK_PREVIOUS, () => controller.previous())
-message.on(ACTION_PLAYBACK_TOGGLE_STATUS, () => controller.togglePlaying())
+/**
+ * Returns the specified value.
+ * @param {String} value
+ */
+function fetch (value) {
+  const config = configuration.getters[value]
+  const func = getters[config.method]
+  return func(config.props)
+}
 
-watch({
-  value: () => reader.playing(),
-  onChanged: playing => message.notifyBackground(EVENT_PLAYBACK_STATUS_CHANGED, { playing }),
-  interval: 200
-})
+/**
+ * Emits an event with the specified values as payload.
+ * @param {String} eventName
+ * @param {String[]} valuesIncludes
+ */
+function emit (eventName, valuesIncludes) {
+  const constructPayload = (prev, value) => {
+    prev[value] = fetch(value)
+    return prev
+  }
+  const payload = valuesIncludes.reduce(constructPayload, {})
+  message.notifyBackground(eventName, payload)
+}
 
-watch({
-  value: () => reader.url(),
-  onChanged: url => message.notifyBackground(EVENT_PLAYBACK_TRACK_CHANGED, { url, ...reader.readAll() }),
-  interval: 400
-})
+/**
+ * Creates a watcher that emits events when the observed value has changed.
+ * @param {Object} watcher
+ * @param {String} watcher.emit
+ * @param {Number} watcher.interval
+ * @param {String[]} watcher.payload
+ * @param {String} watcher.value
+ */
+function configureWatcher ({
+  emit: eventName,
+  interval,
+  payload: valuesIncludes,
+  value: valueName
+}) {
+  watch({
+    value: () => fetch(valueName),
+    onChanged: _ => emit(eventName, valuesIncludes),
+    interval
+  })
+}
+
+/**
+ * Subscribes to the specified event and associate it with a listof actions
+ * to be executed when it is triggered.
+ * @param {Object} command
+ * @param {Array} command.actions
+ * @param {String} command.trigger
+ */
+function configureCommand ({ actions: all, trigger: eventName }) {
+  const performActions = payload => {
+    all.forEach(config => {
+      const func = actions[config.name]
+      func(config.props)
+    })
+  }
+  message.on(eventName, performActions)
+}
+
+configuration.watchers.forEach(configureWatcher)
+configuration.commands.forEach(configureCommand)

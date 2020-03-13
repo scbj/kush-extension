@@ -20,7 +20,7 @@ module.exports = {
         contentScripts: {
           entries: {
             'content-script': [
-              'src/content-scripts/new/index.js'
+              'src/content-scripts/index.js'
             ]
           }
         }
