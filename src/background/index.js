@@ -9,11 +9,13 @@ import { ACCOUNT_AUTHENTICATED } from '@/constants'
 import server from '@/background/server'
 
 function onAuthenticated (payload) {
-  server.authenticate({
-    accessToken: payload.accessToken,
-    refreshToken: payload.refreshToken
-  })
-  server.connect(payload.extension.id)
+  const { accessToken, extension, refreshToken } = payload
+  server.authenticate({ accessToken, refreshToken })
+  server.connect(extension.id)
+
+  localStorage.setItem('accessToken', accessToken)
+  localStorage.setItem('extension', JSON.stringify(extension))
+  localStorage.setItem('refreshToken', refreshToken)
 
   server.on(ACTION_PLAYBACK_TOGGLE_STATUS, () => {
     console.log('🐞: ACTION_PLAYBACK_TOGGLE_STATUS', ACTION_PLAYBACK_TOGGLE_STATUS)
@@ -26,11 +28,17 @@ function onAuthenticated (payload) {
   })
 }
 
+function autoConnect () {
+  const accessToken = localStorage.getItem('accessToken')
+  const extension = JSON.parse(localStorage.getItem('extension'))
+  const refreshToken = localStorage.getItem('refreshToken')
+  if (accessToken && extension) {
+    onAuthenticated({ accessToken, refreshToken, extension })
+  }
+}
+
 message.on(ACCOUNT_AUTHENTICATED, onAuthenticated)
 message.on(EVENT_PLAYBACK_STATUS_CHANGED, payload => server.emit(EVENT_PLAYBACK_STATUS_CHANGED, payload))
 message.on(EVENT_PLAYBACK_TRACK_CHANGED, payload => server.emit(EVENT_PLAYBACK_TRACK_CHANGED, payload))
 
-// const accessToken = localStorage.getItem('accessToken')
-// if (accessToken) {
-//   onAuthenticated({ accessToken })
-// }
+autoConnect()
