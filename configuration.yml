@@ -2,56 +2,66 @@
 
 fetches:
   url:
-    method: innerText
-    target: '.my-class-identifier'
+    method: attribute
+    props:
+      attributeName: href
+      target: 'a.playbackSoundBadge__titleLink'
     
   playing:
     method: exists
-    target: '.my-button-class'
+    props:
+      target: 'button.playing'
     
   title:
-    method: innerText
-    target: '.my-class-identifier'
+    method: attribute
+    props:
+      attributeName: title
+      target: 'a.playbackSoundBadge__titleLink'
     
   channel:
-    method: innerText
-    target: '.my-class-identifier'
+    method: attribute
+    props:
+      attributeName: title
+      target: 'a.playbackSoundBadge__lightLink.sc-link-light'
     
   thumbnail:
-    method: notImplemented
+    method: backgroundImage
+    props:
+      target: '.playControls__soundBadge span.sc-artwork.image__full'
     
 
 watchers:
   - value: url
     emit: 'playback:trackChanged'
     payload: [ channel, title, thumbnail, url ]
+    interval: 200
 
   - value: playing
     emit: 'playback:statusChanged'
+    interval: 400
+    payload: [ playing ]
 
 
 commands:
-  - name: Play next song
-    event: 'playback:next'
+  - trigger: 'playback:next'
     actions:
-      - type: click
-        target: '.my-class'
-        
-  - name: Play previous song
-    event: 'playback:previous'
-    actions:
-      - type: click
-        target: '.my-other-class'
-        
-  - name: Toggle status of playback
-    event: 'playback:toggleStatus'
-    actions:
-      - type: click
-        target: '.my-button-class'
-        
-  - name: Play specific track
-    event: 'playback:play'
-    actions:
-      - type: navigate
+      - name: click
         props:
-          - url
+          target: '.skipControl.sc-ir.playControls__control.playControls__next.skipControl__next'
+        
+  - trigger: 'playback:previous'
+    actions:
+      - name: click
+        props:
+          target: '.skipControl.sc-ir.playControls__control.playControls__prev.skipControl__previous'
+        
+  - trigger: 'playback:toggleStatus'
+    actions:
+      - name: click
+        props:
+          target: '.playControl.sc-ir.playControls__control.playControls__play'
+        
+  # - trigger: 'playback:play'
+  #   actions:
+  #     - name: navigate
+  #       props: [ url ]
