@@ -55,7 +55,9 @@ export default {
         password: this.password
       })
       const { extension } = await this.createExtension()
-      console.log('🐞: extension', extension)
+
+      localStorage.setItem('accessToken', JSON.stringify(accessToken))
+      localStorage.setItem('extension', JSON.stringify(extension))
 
       if (extension) {
         message.notifyBackground(ACCOUNT_AUTHENTICATED, {

@@ -61,7 +61,7 @@ function configureCommand ({ actions: all, trigger: eventName }) {
   const performActions = payload => {
     all.forEach(config => {
       const func = actions[config.name]
-      func(config.props)
+      func(config.props, payload)
     })
   }
   message.on(eventName, performActions)

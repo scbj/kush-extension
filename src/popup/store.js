@@ -3,8 +3,6 @@ import Vuex from 'vuex'
 import VuexPathify, { make } from 'vuex-pathify'
 import axios from 'axios'
 
-const API_URL = 'http://localhost:3000'
-
 Vue.use(Vuex)
 
 const state = {
@@ -17,10 +15,11 @@ const mutations = make.mutations(state)
 const actions = {
   async login ({ commit }, { username, password }) {
     try {
-      const { status, data } = await axios.post(`${API_URL}/auth/login`, {
-        username,
-        password
-      })
+      const { status, data } = await axios
+        .post(`${process.env.VUE_APP_SERVER_URL}/auth/login`, {
+          username,
+          password
+        })
       if (status === 200) {
         const { accessToken } = data
         commit('SET_ACCESS_TOKEN', accessToken)
@@ -34,7 +33,7 @@ const actions = {
 
   async createExtension ({ dispatch, commit, state }) {
     try {
-      const { status, data: extension } = await axios.post(`${API_URL}/extension`, {
+      const { status, data: extension } = await axios.post(`${process.env.VUE_APP_SERVER_URL}/extension`, {
         ip: 'localhost',
         os: 'Windows',
         navigator: 'Chrome',
