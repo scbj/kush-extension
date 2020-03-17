@@ -1,4 +1,5 @@
-import configuration from '@/configuration.json'
+import configuration from '@bit/scbj.kush.configuration'
+
 import { ACCOUNT_AUTHENTICATED } from '@/constants'
 import message from '@/message'
 import socket from './socket'

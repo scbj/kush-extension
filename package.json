@@ -6,11 +6,12 @@
     "build": "vue-cli-service build",
     "clean:dist": "rm -rf dist/",
     "clean:node": "rm -rf node_modules/",
+    "clean": "yarn clean:dist && yarn clean:node",
     "lint": "vue-cli-service lint",
-    "serve": "yarn clean:dist && vue-cli-service build --mode development --watch",
-    "watch:yaml": "yaml2json -w configuration.yml > src/configuration.json"
+    "serve": "yarn clean:dist && vue-cli-service build --mode development --watch"
   },
   "dependencies": {
+    "@bit/scbj.kush.configuration": "^0.0.1",
     "@bit/scbj.kush.constants": "^0.0.2",
     "axios": "^0.19.2",
     "core-js": "^2.6.5",
@@ -31,7 +32,6 @@
     "sass": "^1.19.0",
     "sass-loader": "^8.0.0",
     "vue-cli-plugin-browser-extension": "^0.24.0",
-    "vue-template-compiler": "^2.6.10",
-    "yamljs": "^0.3.0"
+    "vue-template-compiler": "^2.6.10"
   }
 }

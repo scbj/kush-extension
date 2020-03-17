@@ -1,4 +1,5 @@
-import configuration from '@/configuration.json'
+import configuration from '@bit/scbj.kush.configuration'
+
 import message from '@/message'
 import { watch } from '@/utils'
 
