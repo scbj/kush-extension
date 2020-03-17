@@ -1,6 +1,6 @@
 let player = null
 
-function getAudibleTabs () {
+function getAudibleTab () {
   const predicate = { audible: true }
   const single = tabs => tabs.length && tabs[0]
 
@@ -13,7 +13,7 @@ function getAudibleTabs () {
 }
 
 setInterval(async () => {
-  const audible = await getAudibleTabs()
+  const audible = await getAudibleTab()
   if (audible) {
     player = audible
   }
