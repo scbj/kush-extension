@@ -13,7 +13,11 @@ import getters from './getters'
 function fetch (value) {
   const config = configuration.getters[value]
   const func = getters[config.method]
-  return func(config.props)
+  try {
+    return func(config.props)
+  } catch (error) {
+    return error.toString()
+  }
 }
 
 /**
