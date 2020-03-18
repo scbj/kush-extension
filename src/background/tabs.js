@@ -1,21 +1,25 @@
 let player = null
 
 function getAudibleTab () {
-  const predicate = { audible: true }
+  const searchFor = { audible: true }
   const single = tabs => tabs.length && tabs[0]
 
   return new Promise(resolve =>
     browser.tabs
-      .query(predicate)
+      .query(searchFor)
       .then(single)
       .then(tab => resolve(tab))
   )
 }
 
 setInterval(async () => {
-  const audible = await getAudibleTab()
-  if (audible) {
-    player = audible
+  try {
+    const audible = await getAudibleTab()
+    if (audible) {
+      player = audible
+    }
+  } catch (error) {
+    console.error(error)
   }
 }, 1000)
 

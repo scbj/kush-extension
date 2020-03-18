@@ -16,6 +16,10 @@ function connect (accessToken, extensionId) {
     }
   }
   socket = io(process.env.VUE_APP_SERVER_URL, options)
+  socket.on('disconnect', reason => {
+    socket = null
+    console.log(reason)
+  })
 }
 
 /**
