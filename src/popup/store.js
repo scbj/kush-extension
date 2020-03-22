@@ -1,9 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPathify, { make } from 'vuex-pathify'
+import VuexPersist from 'vuex-persist'
 import axios from 'axios'
 
 Vue.use(Vuex)
+
+const vuexLocalStorage = new VuexPersist({
+  key: 'vuex',
+  store: localStorage
+})
 
 const state = {
   accessToken: '',
@@ -58,6 +64,7 @@ export default new Vuex.Store({
   mutations,
   actions,
   plugins: [
-    VuexPathify.plugin
+    VuexPathify.plugin,
+    vuexLocalStorage.plugin
   ]
 })

@@ -5,6 +5,13 @@ import message from '@/message'
 import socket from './socket'
 import tabs from './tabs'
 
+function intialize ({ accessToken, extension }) {
+  socket.connect(accessToken, extension.id)
+
+  configuration.watchers.forEach(configureDispatcher)
+  configuration.commands.forEach(configureCommand)
+}
+
 function configureDispatcher ({ emit: eventName }) {
   const dispatch = payload => socket.emit(eventName, payload)
   message.on(eventName, dispatch)
@@ -18,12 +25,17 @@ function configureCommand ({ trigger: eventName }) {
   socket.on(eventName, notifyContentScript)
 }
 
-message.on(ACCOUNT_AUTHENTICATED, payload => {
-  const { accessToken, extension } = payload
+function loadLocalStorage () {
+  const state = localStorage.getItem('vuex')
 
-  // Connect Socket.io
-  socket.connect(accessToken, extension.id)
+  if (state) {
+    const { accessToken, extension } = JSON.parse(state)
+    accessToken && extension &&
+      intialize({ accessToken, extension })
+  }
+}
 
-  configuration.watchers.forEach(configureDispatcher)
-  configuration.commands.forEach(configureCommand)
-})
+loadLocalStorage()
+
+// Message from Popup when user logged in
+message.on(ACCOUNT_AUTHENTICATED, intialize)
