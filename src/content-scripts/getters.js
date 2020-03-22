@@ -17,25 +17,39 @@ function getBackgroundImageUrlOf (element) {
   }
 }
 
-export default {
-  attribute ({ attributeName, target, type }) {
-    const value = document
-      .querySelector(target)
-      .getAttribute(attributeName)
-    switch (type) {
-      case 'Number': return +value
-      default: return value
-    }
-  },
-
-  exists ({ target }) {
-    return !!document
-      .querySelector(target)
-  },
-
-  backgroundImage ({ target }) {
-    const element = document.querySelector(target)
-    const url = getBackgroundImageUrlOf(element)
-    return url
+function attribute ({ attributeName, target, type }) {
+  const value = document
+    .querySelector(target)
+    .getAttribute(attributeName)
+  switch (type) {
+    case 'Number': return +value
+    default: return value
   }
+}
+
+function backgroundImage ({ target }) {
+  const element = document.querySelector(target)
+  const url = getBackgroundImageUrlOf(element)
+  return url
+}
+
+function exists ({ target }) {
+  return !!document
+    .querySelector(target)
+}
+
+function stateExists ({ defaultState, targets }) {
+  for (const [ state, target ] of Object.entries(targets)) {
+    if (exists({ target })) {
+      return state
+    }
+  }
+  return defaultState
+}
+
+export default {
+  attribute,
+  backgroundImage,
+  exists,
+  stateExists
 }

@@ -8,11 +8,12 @@ import tabs from './tabs'
 function intialize ({ accessToken, extension }) {
   socket.connect(accessToken, extension.id)
 
-  configuration.watchers.forEach(configureDispatcher)
+  const events = new Set(configuration.watchers.map(x => x.emit))
+  Array.from(events).forEach(configureDispatcher)
   configuration.commands.forEach(configureCommand)
 }
 
-function configureDispatcher ({ emit: eventName }) {
+function configureDispatcher (eventName) {
   const dispatch = payload => socket.emit(eventName, payload)
   message.on(eventName, dispatch)
 }
