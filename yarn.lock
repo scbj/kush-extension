@@ -678,12 +678,12 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@bit/scbj.kush.configuration@^0.0.1":
-  version "0.0.1"
-  resolved "https://node.bit.dev/scbj.kush.configuration/-/scbj.kush.configuration-0.0.1.tgz#da24ef7532184bc7465cdfb314a6a859468a1f70"
-  integrity sha1-2iTvdTIYS8dGXN+zFKaoWUaKH3A=
+"@bit/scbj.kush.configuration@0.0.6":
+  version "0.0.6"
+  resolved "https://node.bit.dev/scbj.kush.configuration/-/scbj.kush.configuration-0.0.6.tgz#66c1a4cccabce27d441969a03655fdc845658754"
+  integrity sha1-ZsGkzMq84n1EGWmgNlX9yEVlh1Q=
 
-"@bit/scbj.kush.constants@^0.0.2":
+"@bit/scbj.kush.constants@0.0.2":
   version "0.0.2"
   resolved "https://node.bit.dev/scbj.kush.constants/-/scbj.kush.constants-0.0.2.tgz#5e1d87ffa3f0075fd5a5c621b8adb46ebe165c55"
   integrity sha1-Xh2H/6PwB1/VpcYhuK20br4WXFU=

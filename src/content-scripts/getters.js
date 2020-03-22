@@ -18,10 +18,14 @@ function getBackgroundImageUrlOf (element) {
 }
 
 export default {
-  attribute ({ attributeName, target }) {
-    return document
+  attribute ({ attributeName, target, type }) {
+    const value = document
       .querySelector(target)
       .getAttribute(attributeName)
+    switch (type) {
+      case 'Number': return +value
+      default: return value
+    }
   },
 
   exists ({ target }) {
